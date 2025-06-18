@@ -8,6 +8,7 @@ public class FibonacciHeap {
 	public HeapNode min;
 	private int c;
 	private int size;
+	private int trees;
 	private int totalCuts;
 	private int totalLinks;
 
@@ -20,7 +21,12 @@ public class FibonacciHeap {
 	public FibonacciHeap(int c) {
 		this.c = c;
 		this.size=0;
+		this.trees = 0;
+		this.min = null;
 	}
+
+
+
 
 	/**
 	 * 
@@ -32,8 +38,16 @@ public class FibonacciHeap {
 	public HeapNode insert(int key, String info) {
 		HeapNode node =new HeapNode(key,info,this.min);
 		this.size++;
-		return node; // should be replaced by student code
+		this.trees++;
+		if(key < this.min.key) {
+			this.min = node;
+		}
+		return node;
 	}
+
+
+
+
 
 	/**
 	 * 
@@ -41,8 +55,11 @@ public class FibonacciHeap {
 	 *
 	 */
 	public HeapNode findMin() {
-		return null; // should be replaced by student code
+		return min;
 	}
+
+
+
 
 	/**
 	 * 
@@ -51,9 +68,41 @@ public class FibonacciHeap {
 	 *
 	 */
 	public int deleteMin() {
-		return 46; // should be replaced by student code
+		FibonacciHeap children = new FibonacciHeap(c);
 
+		this.trees--;
+		this.size -= this.min.rank;
+
+		HeapNode current = this.min.child;
+		current.next.prev = null;
+		while(current != null) {
+			children.insert(current.key, current.info);
+			current = current.next;
+		}
+
+		//finding new min
+		
+		if(this.trees == 1) {
+			this.min = null;
+		}
+		else if(this.trees == 2) {
+			this.min 
+		}
+		else {
+			HeapNode newMin = this.min.next;
+		}
+
+
+
+		this.meld(children);
+		current = this.min.next.next;
+		
+
+		return 46; // should be replaced by student code
 	}
+
+
+
 
 	/**
 	 * 
@@ -64,8 +113,59 @@ public class FibonacciHeap {
 	 * 
 	 */
 	public int decreaseKey(HeapNode x, int diff) {
-		return 46; // should be replaced by student code
+		x.key -= diff;
+
+		if(x.parent == null) { //decreasing root
+			return 0;
+		}
+
+		if(x.key >= x.parent.key) { return 0; } //no cutting needed
+
+		int numberOfCuts = this.cascadingCuts(x);
+
+		this.totalCuts += numberOfCuts;
+
+		return numberOfCuts;
 	}
+
+
+	private int cascadingCuts(HeapNode x) { //cutting, not changing key
+		if(x.parent == null) { return 0; }
+
+		//fixing pointers
+		if(x.next == x) { //no siblings
+				x.parent.child = null;
+		}
+		else {
+			x.parent.child = x.next;
+			x.next.prev = x.prev;
+			x.prev.next = x.next;
+		}
+		x.parent.rank -= 1;
+		x.parent.cuttedChildren += 1;
+
+		//Adding to tree list
+		x.next = this.min.next;
+		x.prev = this.min;
+		this.min.next = x;
+		this.min.next.prev = x;
+
+		//Checking if min has changed
+		if(x.key < this.min.key) {
+			this.min = x;
+		}
+
+		//cascading
+		if(x.parent.cuttedChildren == this.c) {
+			return 1 + this.cascadingCuts(x.parent);
+		}
+
+		return 1;
+	}
+	
+
+
+
 
 	/**
 	 * 
@@ -74,7 +174,10 @@ public class FibonacciHeap {
 	 *
 	 */
 	public int delete(HeapNode x) {
-		return 46; // should be replaced by student code
+		int minimum = this.min.key - 1;
+
+		this.decreaseKey(x, x.key - minimum);
+		return this.deleteMin();
 	}
 
 	/**
@@ -101,6 +204,17 @@ public class FibonacciHeap {
 	 *
 	 */
 	public void meld(FibonacciHeap heap2) {
+		java.util.ArrayList<Object> buckets = new java.util.ArrayList<>();
+		
+		HeapNode current = this.min;
+		while(current != null) {
+
+		}
+
+
+
+		this.totalLinks += heap2.totalLinks;
+		this.totalCuts += heap2.totalCuts;
 		return; // should be replaced by student code
 	}
 
@@ -119,7 +233,7 @@ public class FibonacciHeap {
 	 * 
 	 */
 	public int numTrees() {
-		return 46; // should be replaced by student code
+		return trees;
 	}
 
 	/**
@@ -134,15 +248,17 @@ public class FibonacciHeap {
 		public HeapNode prev;
 		public HeapNode parent;
 		public int rank;
+		public int cuttedChildren;
 
-		public HeapNode(int key, String info,HeapNode prev)
-		{
+		public HeapNode(int key, String info, HeapNode prev) {
 			this.key=key;
 			this.info=info;
 			this.child=null;
 			this.parent=null;
 			this.rank=0;
-			if (prev==null){
+			this.cuttedChildren = 0;
+
+			if (prev==null) {
 				this.prev=this;
 				this.next=this;
 			}
@@ -150,6 +266,7 @@ public class FibonacciHeap {
 				this.prev=prev;
 				this.next=prev.next;
 				prev.next=this;
+
 				if(prev.prev==prev){
 					prev.prev=this;
 				}
