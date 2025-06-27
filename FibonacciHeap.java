@@ -128,6 +128,8 @@ public class FibonacciHeap {
 			else { //linking
 				links += this.Linking(buckets, current); // returns number of links
 			}
+
+			current = current.next;
 		}
 		
 
