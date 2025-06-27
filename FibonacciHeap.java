@@ -33,9 +33,11 @@ public class FibonacciHeap {
 	 *
 	 */
 	public HeapNode insert(int key, String info) {
+		// inserting new node after the current min
 		HeapNode node = new HeapNode(key, info, this.min);
 		this.size++;
 		this.trees++;
+		// updating min
 		if (key < this.min.key) {
 			this.min = node;
 		}
@@ -58,14 +60,16 @@ public class FibonacciHeap {
 	 *
 	 */
 	public int deleteMin() {
-
+		// updating size and number of trees
 		this.trees += this.min.rank - 1;
 		this.size--;
 
+		// adding the children of min as tress
 		HeapNode current = this.min.child;
 		if (current != null)
 			current.prev.next = null;
 		while (current != null) {
+			// insert children as tree after current min
 			insertTree(current);
 			current = current.next;
 		}
@@ -154,6 +158,7 @@ public class FibonacciHeap {
 	}
 
 	public void insertTree(HeapNode x) {
+		// adding a node with possible children after min
 		x.parent = null;
 		x.next = this.min.next;
 		x.prev = this.min;
