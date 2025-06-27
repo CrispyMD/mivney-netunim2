@@ -129,6 +129,7 @@ public class FibonacciHeap {
 				links += this.Linking(buckets, current); // returns number of links
 			}
 		}
+		
 
 		current = (HeapNode) buckets.get(0);
 		for(int i = 0; i < buckets.size() - 1; i++) {
@@ -151,6 +152,12 @@ public class FibonacciHeap {
 
 		HeapNode otherNode = (HeapNode) buckets.get(currentRank);
 		if(current.key <= otherNode.key) {
+			if(current.child == null) { //adding first child
+				current.child = otherNode;
+				otherNode.next = otherNode;
+				otherNode.prev = otherNode;
+			}
+
 			current.child.prev.next = otherNode;
 			otherNode.prev = current.child.prev;
 			otherNode.next = current.child;
@@ -165,6 +172,12 @@ public class FibonacciHeap {
 			return 1 + Linking(buckets, current);
 		}
 		else {
+			if(otherNode.child == null) { //adding first child
+				otherNode.child = current;
+				current.next = current;
+				current.prev = current;
+			}
+			
 			otherNode.child.prev.next = current;
 			current.prev = otherNode.child.prev;
 			current.next = otherNode.child;
