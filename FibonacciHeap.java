@@ -58,35 +58,38 @@ public class FibonacciHeap {
 	 *
 	 */
 	public int deleteMin() {
-		FibonacciHeap children = new FibonacciHeap(c);
 
-		this.trees--;
-		this.size -= this.min.rank;
+		this.trees += this.min.rank - 1;
+		this.size--;
 
 		HeapNode current = this.min.child;
-		current.next.prev = null;
-		while(current != null) {
-			children.insert(current.key, current.info);
+		if (current != null)
+			current.prev.next = null;
+		while (current != null) {
+			insertTree(current);
 			current = current.next;
 		}
+		// deleteing the old minimum
+		this.min.prev.next = this.min.next;
+		this.min.next.prev = this.min.prev;
+		// finding new min
 
-		//finding new min
-		
-		if(this.trees == 1) {
+		if (this.size == 0) {
 			this.min = null;
+		} else {
+			HeapNode start = this.min.prev;
+			HeapNode curr = this.min.prev;
+			HeapNode Nmin = curr;
+			int min = curr.key;
+			curr = curr.next;
+			while (curr != start) {
+				if (curr.key < min) {
+					min = curr.key;
+					Nmin = curr;
+				}
+			}
+			this.min = Nmin;
 		}
-		else if(this.trees == 2) {
-			this.min 
-		}
-		else {
-			HeapNode newMin = this.min.next;
-		}
-
-
-
-		this.meld(children);
-		current = this.min.next.next;
-		
 
 		return 46; // should be replaced by student code
 	}
@@ -139,7 +142,19 @@ public class FibonacciHeap {
 		x.parent.rank -= 1;
 		x.parent.cuttedChildren += 1;
 
-		// Adding to tree list
+		// Adding to tree list and checking new minimum
+		insertTree(x);
+
+		// cascading
+		if (x.parent.cuttedChildren == this.c) {
+			return 1 + this.cascadingCuts(x.parent);
+		}
+
+		return 1;
+	}
+
+	public void insertTree(HeapNode x) {
+		x.parent = null;
 		x.next = this.min.next;
 		x.prev = this.min;
 		this.min.next = x;
@@ -149,13 +164,7 @@ public class FibonacciHeap {
 		if (x.key < this.min.key) {
 			this.min = x;
 		}
-
-		// cascading
-		if (x.parent.cuttedChildren == this.c) {
-			return 1 + this.cascadingCuts(x.parent);
-		}
-
-		return 1;
+		return;
 	}
 
 	/**
@@ -199,14 +208,15 @@ public class FibonacciHeap {
 		heap2.min.prev.next = this.min.next;
 		this.min.next = heap2.min;
 		heap2.min.prev = this.min;
-		
-		if(heap2.min.key < this.min.key) {
+
+		if (heap2.min.key < this.min.key) {
 			this.min = this.min.next;
 		}
 
-
 		this.totalLinks += heap2.totalLinks;
 		this.totalCuts += heap2.totalCuts;
+		this.trees += heap2.trees;
+		this.size += heap2.size;
 		return;
 	}
 
