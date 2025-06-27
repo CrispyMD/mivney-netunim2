@@ -195,16 +195,19 @@ public class FibonacciHeap {
 	 *
 	 */
 	public void meld(FibonacciHeap heap2) {
-		java.util.ArrayList<Object> buckets = new java.util.ArrayList<>();
-
-		HeapNode current = this.min;
-		while (current != null) {
-
+		this.min.next.prev = heap2.min.prev;
+		heap2.min.prev.next = this.min.next;
+		this.min.next = heap2.min;
+		heap2.min.prev = this.min;
+		
+		if(heap2.min.key < this.min.key) {
+			this.min = this.min.next;
 		}
+
 
 		this.totalLinks += heap2.totalLinks;
 		this.totalCuts += heap2.totalCuts;
-		return; // should be replaced by student code
+		return;
 	}
 
 	/**
