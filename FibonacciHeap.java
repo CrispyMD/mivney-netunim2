@@ -78,6 +78,7 @@ public class FibonacciHeap {
 		// deleteing the old minimum
 		this.min.prev.next = this.min.next;
 		this.min.next.prev = this.min.prev;
+
 		// finding new min
 
 		if (this.size == 0) {
@@ -107,9 +108,15 @@ public class FibonacciHeap {
 
 		this.min.prev.next = null;
 		HeapNode current = this.min;
+
+		while (current != null) {
+			current.nextInLine = current.next;
+			current = current.next;
+		}
+		current = this.min;
 		while (current != null) {
 			int currentRank = current.rank;
-			HeapNode next = current.next;
+			HeapNode next = current.nextInLine;
 			// Changing array length
 			if (currentRank + 1 >= buckets.size()) {
 				for (int i = 0; i < currentRank + 2 - buckets.size(); i++) {
@@ -121,13 +128,6 @@ public class FibonacciHeap {
 				buckets.add(currentRank, current);
 			} else { // linking
 				System.out.println("About to enter linking from succ");
-				for (Object o : buckets) {
-					if (o == null) {
-						continue;
-					}
-					System.out.println(((HeapNode) o).key + " " + buckets.indexOf(o));
-				}
-				System.out.println("dsvcxv");
 				links += this.Linking(buckets, current); // returns number of links
 			}
 
@@ -186,14 +186,6 @@ public class FibonacciHeap {
 				buckets.set(currentRank + 1, current);
 				return 1;
 			}
-
-			for (Object o : buckets) {
-				if (o == null) {
-					continue;
-				}
-				System.out.println(((HeapNode) o).key + " " + buckets.indexOf(o));
-			}
-			System.out.println("Done");
 
 			return 1 + Linking(buckets, current);
 		} else {
@@ -387,6 +379,7 @@ public class FibonacciHeap {
 		public HeapNode parent;
 		public int rank;
 		public int cuttedChildren;
+		public HeapNode nextInLine;
 
 		public HeapNode(int key, String info, HeapNode prev) {
 			this.key = key;
@@ -395,6 +388,7 @@ public class FibonacciHeap {
 			this.parent = null;
 			this.rank = 0;
 			this.cuttedChildren = 0;
+			this.nextInLine = null;
 
 			if (prev == null) {
 				this.prev = this;
@@ -402,6 +396,7 @@ public class FibonacciHeap {
 			} else {
 				this.prev = prev;
 				this.next = prev.next;
+				prev.next.prev = this;
 				prev.next = this;
 
 				if (prev.prev == prev) {
