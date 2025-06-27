@@ -80,7 +80,8 @@ public class FibonacciHeap {
 
 		if (this.size == 0) {
 			this.min = null;
-		} else {
+		}
+		else {
 			HeapNode start = this.min.prev;
 			HeapNode curr = this.min.prev;
 			HeapNode Nmin = curr;
@@ -95,8 +96,90 @@ public class FibonacciHeap {
 			this.min = Nmin;
 		}
 
-		return 46; // should be replaced by student code
+		return this.SuccessiveLinking();
 	}
+
+
+
+
+	private int SuccessiveLinking() {
+		java.util.ArrayList<Object> buckets = new java.util.ArrayList<>();
+		int links = 0;
+
+		this.min.prev.next = null;
+		HeapNode current = this.min;
+		while(current != null) {
+			int currentRank = current.rank;
+
+			//Changing array length
+			if(currentRank + 1 >= buckets.size()) {
+				for(int i = 0; i < currentRank + 2 - buckets.size(); i++) {
+					buckets.add(null);
+				}
+			}
+
+			if(buckets.get(currentRank) == null) {
+				buckets.add(currentRank, current);
+			}
+			else { //linking
+				links += this.Linking(buckets, current); // returns number of links
+			}
+		}
+
+		current = (HeapNode) buckets.get(0);
+		for(int i = 0; i < buckets.size() - 1; i++) {
+			current.next = (HeapNode) buckets.get(i + 1);
+			((HeapNode) buckets.get(i + 1)).prev = current;
+		}
+		//for last element
+		current.next = (HeapNode) buckets.get(0);
+		((HeapNode) buckets.get(0)).prev = current;
+
+		this.totalLinks += links;
+		return links;
+	}
+
+
+
+
+	private int Linking(java.util.ArrayList<Object> buckets, HeapNode current) {
+		int currentRank = current.rank;
+
+		HeapNode otherNode = (HeapNode) buckets.get(currentRank);
+		if(current.key <= otherNode.key) {
+			current.child.prev.next = otherNode;
+			otherNode.prev = current.child.prev;
+			otherNode.next = current.child;
+			current.child.prev = otherNode;
+			current.rank += 1;
+
+			if(buckets.get(currentRank + 1) == null) {
+				buckets.set(currentRank + 1, current);
+				return 1;
+			}
+			 //maybe another link
+			return 1 + Linking(buckets, current);
+		}
+		else {
+			otherNode.child.prev.next = current;
+			current.prev = otherNode.child.prev;
+			current.next = otherNode.child;
+			otherNode.child.prev = current;
+			otherNode.rank += 1;
+
+			if(buckets.get(currentRank + 1) == null) {
+				buckets.set(currentRank + 1, otherNode);
+				return 1;
+			}
+
+			return 1 + Linking(buckets, otherNode);
+		}
+	}
+
+
+
+
+
 
 	/**
 	 * 
