@@ -38,7 +38,10 @@ public class FibonacciHeap {
 		this.size++;
 		this.trees++;
 		// updating min
-		if (key < this.min.key) {
+		if(size == 1) {
+			this.min = node;
+		}
+		else if (key < this.min.key) {
 			this.min = node;
 		}
 		return node;
