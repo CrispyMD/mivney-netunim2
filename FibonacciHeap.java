@@ -150,8 +150,6 @@ public class FibonacciHeap {
 
 
 	private int Linking(java.util.ArrayList<Object> buckets, HeapNode current) {
-		
-
 		int currentRank = current.rank;
 
 		if(currentRank == buckets.size()) {
@@ -166,11 +164,13 @@ public class FibonacciHeap {
 				otherNode.next = otherNode;
 				otherNode.prev = otherNode;
 			}
-
-			current.child.prev.next = otherNode;
-			otherNode.prev = current.child.prev;
-			otherNode.next = current.child;
-			current.child.prev = otherNode;
+			else {
+				current.child.prev.next = otherNode;
+				otherNode.prev = current.child.prev;
+				otherNode.next = current.child;
+				current.child.prev = otherNode;
+			}
+			otherNode.parent = current;
 			current.rank += 1;
 
 			if(buckets.get(currentRank + 1) == null) {
@@ -186,11 +186,13 @@ public class FibonacciHeap {
 				current.next = current;
 				current.prev = current;
 			}
-			
-			otherNode.child.prev.next = current;
-			current.prev = otherNode.child.prev;
-			current.next = otherNode.child;
-			otherNode.child.prev = current;
+			else {
+				otherNode.child.prev.next = current;
+				current.prev = otherNode.child.prev;
+				current.next = otherNode.child;
+				otherNode.child.prev = current;
+			}
+			current.parent = otherNode;
 			otherNode.rank += 1;
 
 			if(buckets.get(currentRank + 1) == null) {
