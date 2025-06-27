@@ -72,6 +72,7 @@ public class FibonacciHeap {
 			current.prev.next = null;
 		while (current != null) {
 			// insert children as tree after current min
+			current.parent = null;
 			insertTree(current);
 			current = current.next;
 		}
