@@ -208,6 +208,7 @@ public class FibonacciHeap {
 			}
 
 			for(Object o : buckets) {
+				if(o == null) {continue;}
 				System.out.println(((HeapNode) o).key);
 			}
 			System.out.println("Done");
