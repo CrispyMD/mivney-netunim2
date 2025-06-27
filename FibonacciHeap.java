@@ -38,10 +38,9 @@ public class FibonacciHeap {
 		this.size++;
 		this.trees++;
 		// updating min
-		if(size == 1) {
+		if (size == 1) {
 			this.min = node;
-		}
-		else if (key < this.min.key) {
+		} else if (key < this.min.key) {
 			this.min = node;
 		}
 		return node;
@@ -83,8 +82,7 @@ public class FibonacciHeap {
 
 		if (this.size == 0) {
 			this.min = null;
-		}
-		else {
+		} else {
 			HeapNode start = this.min.prev;
 			HeapNode curr = this.min.prev;
 			HeapNode Nmin = curr;
@@ -103,79 +101,77 @@ public class FibonacciHeap {
 		return this.SuccessiveLinking();
 	}
 
-
-
-
 	private int SuccessiveLinking() {
 		java.util.ArrayList<Object> buckets = new java.util.ArrayList<>();
 		int links = 0;
 
 		this.min.prev.next = null;
 		HeapNode current = this.min;
-		while(current != null) {
+		while (current != null) {
 			int currentRank = current.rank;
-
-			//Changing array length
-			if(currentRank + 1 >= buckets.size()) {
-				for(int i = 0; i < currentRank + 2 - buckets.size(); i++) {
+			HeapNode next = current.next;
+			// Changing array length
+			if (currentRank + 1 >= buckets.size()) {
+				for (int i = 0; i < currentRank + 2 - buckets.size(); i++) {
 					buckets.add(null);
 				}
 			}
 
-			if(buckets.get(currentRank) == null) {
+			if (buckets.get(currentRank) == null) {
 				buckets.add(currentRank, current);
-			}
-			else { //linking
+			} else { // linking
 				System.out.println("About to enter linking from succ");
-				for(Object o : buckets) {
-					if(o == null) {continue;}
+				for (Object o : buckets) {
+					if (o == null) {
+						continue;
+					}
 					System.out.println(((HeapNode) o).key + " " + buckets.indexOf(o));
 				}
 				System.out.println("dsvcxv");
 				links += this.Linking(buckets, current); // returns number of links
 			}
 
-			current = current.next;
+			current = next;
 		}
-		
 
 		current = (HeapNode) buckets.get(0);
-		for(int i = 0; i < buckets.size() - 1; i++) {
-			current.next = (HeapNode) buckets.get(i + 1);
-			((HeapNode) buckets.get(i + 1)).prev = current;
+		int index = 0;
+		while (current == null)// searchhing for first tree in buckets to be min
+		{
+			index++;
+			current = (HeapNode) buckets.get(index);
 		}
-		//for last element
-		current.next = (HeapNode) buckets.get(0);
-		((HeapNode) buckets.get(0)).prev = current;
+		this.min = current;
+		for (int i = index; i < buckets.size(); i++) {
+			current = (HeapNode) buckets.get(i);
+			if (current != null) {
+				insertTree(current);
+			}
+		}
 
 		this.totalLinks += links;
 		return links;
 	}
 
-
-
-
 	private int Linking(java.util.ArrayList<Object> buckets, HeapNode current) {
 		int currentRank = current.rank;
 
-		if(currentRank == buckets.size()) {
+		if (currentRank == buckets.size()) {
 			buckets.add(null);
 		}
 
-		if(buckets.get(currentRank) == null) {
+		if (buckets.get(currentRank) == null) {
 			buckets.set(currentRank, current);
 			return 0;
 		}
 
-
 		HeapNode otherNode = (HeapNode) buckets.get(currentRank);
-		if(current.key <= otherNode.key) {
-			if(current.child == null) { //adding first child
+		if (current.key <= otherNode.key) {
+			if (current.child == null) { // adding first child
 				current.child = otherNode;
 				otherNode.next = otherNode;
 				otherNode.prev = otherNode;
-			}
-			else {
+			} else {
 				current.child.prev.next = otherNode;
 				otherNode.prev = current.child.prev;
 				otherNode.next = current.child;
@@ -186,29 +182,26 @@ public class FibonacciHeap {
 
 			buckets.set(currentRank, null);
 
-			if(buckets.get(currentRank + 1) == null) {
+			if (buckets.get(currentRank + 1) == null) {
 				buckets.set(currentRank + 1, current);
 				return 1;
 			}
 
-			
-
-			for(Object o : buckets) {
-				if(o == null) {continue;}
+			for (Object o : buckets) {
+				if (o == null) {
+					continue;
+				}
 				System.out.println(((HeapNode) o).key + " " + buckets.indexOf(o));
 			}
 			System.out.println("Done");
 
-
 			return 1 + Linking(buckets, current);
-		}
-		else {
-			if(otherNode.child == null) { //adding first child
+		} else {
+			if (otherNode.child == null) { // adding first child
 				otherNode.child = current;
 				current.next = current;
 				current.prev = current;
-			}
-			else {
+			} else {
 				otherNode.child.prev.next = current;
 				current.prev = otherNode.child.prev;
 				current.next = otherNode.child;
@@ -219,15 +212,15 @@ public class FibonacciHeap {
 
 			buckets.set(currentRank, null);
 
-			if(buckets.get(currentRank + 1) == null) {
+			if (buckets.get(currentRank + 1) == null) {
 				buckets.set(currentRank + 1, otherNode);
 				return 1;
 			}
 
-			
-
-			for(Object o : buckets) {
-				if(o == null) {continue;}
+			for (Object o : buckets) {
+				if (o == null) {
+					continue;
+				}
 				System.out.println(((HeapNode) o).key + " " + buckets.indexOf(o));
 			}
 			System.out.println("Done");
@@ -235,11 +228,6 @@ public class FibonacciHeap {
 			return 1 + Linking(buckets, otherNode);
 		}
 	}
-
-
-
-
-
 
 	/**
 	 * 
