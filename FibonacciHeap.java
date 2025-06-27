@@ -126,6 +126,12 @@ public class FibonacciHeap {
 				buckets.add(currentRank, current);
 			}
 			else { //linking
+				System.out.println("About to enter linking from succ");
+				for(Object o : buckets) {
+					if(o == null) {continue;}
+					System.out.println(((HeapNode) o).key + " " + buckets.indexOf(o));
+				}
+				System.out.println("dsvcxv");
 				links += this.Linking(buckets, current); // returns number of links
 			}
 
@@ -178,13 +184,22 @@ public class FibonacciHeap {
 			otherNode.parent = current;
 			current.rank += 1;
 
+			buckets.set(currentRank, null);
+
 			if(buckets.get(currentRank + 1) == null) {
 				buckets.set(currentRank + 1, current);
 				return 1;
 			}
-			 //maybe another link
 
-			buckets.set(currentRank, null);
+			
+
+			for(Object o : buckets) {
+				if(o == null) {continue;}
+				System.out.println(((HeapNode) o).key + " " + buckets.indexOf(o));
+			}
+			System.out.println("Done");
+
+
 			return 1 + Linking(buckets, current);
 		}
 		else {
@@ -202,18 +217,21 @@ public class FibonacciHeap {
 			current.parent = otherNode;
 			otherNode.rank += 1;
 
+			buckets.set(currentRank, null);
+
 			if(buckets.get(currentRank + 1) == null) {
 				buckets.set(currentRank + 1, otherNode);
 				return 1;
 			}
 
+			
+
 			for(Object o : buckets) {
 				if(o == null) {continue;}
-				System.out.println(((HeapNode) o).key);
+				System.out.println(((HeapNode) o).key + " " + buckets.indexOf(o));
 			}
 			System.out.println("Done");
 
-			buckets.set(currentRank, null);
 			return 1 + Linking(buckets, otherNode);
 		}
 	}
