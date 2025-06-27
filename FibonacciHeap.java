@@ -95,6 +95,7 @@ public class FibonacciHeap {
 					min = curr.key;
 					Nmin = curr;
 				}
+				curr = curr.next;
 			}
 			this.min = Nmin;
 		}
