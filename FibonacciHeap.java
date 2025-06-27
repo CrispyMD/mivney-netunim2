@@ -150,7 +150,14 @@ public class FibonacciHeap {
 
 
 	private int Linking(java.util.ArrayList<Object> buckets, HeapNode current) {
+		
+
 		int currentRank = current.rank;
+
+		if(currentRank == buckets.size()) {
+			buckets.add(null);
+		}
+
 
 		HeapNode otherNode = (HeapNode) buckets.get(currentRank);
 		if(current.key <= otherNode.key) {
