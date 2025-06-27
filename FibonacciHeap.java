@@ -156,6 +156,11 @@ public class FibonacciHeap {
 			buckets.add(null);
 		}
 
+		if(buckets.get(currentRank) == null) {
+			buckets.set(currentRank, current);
+			return 0;
+		}
+
 
 		HeapNode otherNode = (HeapNode) buckets.get(currentRank);
 		if(current.key <= otherNode.key) {
@@ -178,6 +183,8 @@ public class FibonacciHeap {
 				return 1;
 			}
 			 //maybe another link
+
+			buckets.set(currentRank, null);
 			return 1 + Linking(buckets, current);
 		}
 		else {
@@ -200,6 +207,12 @@ public class FibonacciHeap {
 				return 1;
 			}
 
+			for(Object o : buckets) {
+				System.out.println(((HeapNode) o).key);
+			}
+			System.out.println("Done");
+
+			buckets.set(currentRank, null);
 			return 1 + Linking(buckets, otherNode);
 		}
 	}
