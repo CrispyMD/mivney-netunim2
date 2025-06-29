@@ -284,6 +284,9 @@ public class FibonacciHeap {
 	public void insertTree(HeapNode x) {
 		// adding a node with possible children after min
 		x.parent = null;
+		if (this.min == null) {
+			this.min = x;
+		}
 		x.next = this.min.next;
 		x.prev = this.min;
 		this.min.next = x;
@@ -333,13 +336,17 @@ public class FibonacciHeap {
 	 *
 	 */
 	public void meld(FibonacciHeap heap2) {
-		this.min.next.prev = heap2.min.prev;
-		heap2.min.prev.next = this.min.next;
-		this.min.next = heap2.min;
-		heap2.min.prev = this.min;
+		if (this.min != null && heap2.min != null) {
+			this.min.next.prev = heap2.min.prev;
+			heap2.min.prev.next = this.min.next;
+			this.min.next = heap2.min;
+			heap2.min.prev = this.min;
 
-		if (heap2.min.key < this.min.key) {
-			this.min = this.min.next;
+			if (heap2.min.key < this.min.key) {
+				this.min = this.min.next;
+			}
+		} else if (this.min == null && heap2.min != null) {
+			this.min = heap2.min;
 		}
 
 		this.totalLinks += heap2.totalLinks;
