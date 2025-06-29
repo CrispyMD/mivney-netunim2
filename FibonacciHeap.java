@@ -274,7 +274,7 @@ public class FibonacciHeap {
 		insertTree(x);
 
 		// cascading
-		if (x.parent.cuttedChildren == this.c) {
+		if (x.parent != null && x.parent.cuttedChildren == this.c) {
 			return 1 + this.cascadingCuts(x.parent);
 		}
 
