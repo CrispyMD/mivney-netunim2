@@ -23,6 +23,8 @@ public class FibonacciHeap {
 		this.size = 0;
 		this.trees = 0;
 		this.min = null;
+		this.totalCuts = 0;
+		this.totalLinks = 0;
 	}
 
 	/**
@@ -52,7 +54,7 @@ public class FibonacciHeap {
 	 *
 	 */
 	public HeapNode findMin() {
-		return min;
+		return this.min;
 	}
 
 	/**
