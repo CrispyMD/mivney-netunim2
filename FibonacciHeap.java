@@ -188,10 +188,14 @@ public class FibonacciHeap {
 		if (current.key <= otherNode.key) {
 			if (current.child == null) { // adding first child
 				current.child = otherNode;
+				otherNode.next.prev = otherNode.prev;
+				otherNode.prev.next = otherNode.next;
 				otherNode.next = otherNode;
 				otherNode.prev = otherNode;
 			} else {
 				current.child.prev.next = otherNode;
+				otherNode.prev.next = otherNode.next;
+				otherNode.next.prev = otherNode.prev;
 				otherNode.prev = current.child.prev;
 				otherNode.next = current.child;
 				current.child.prev = otherNode;
@@ -210,10 +214,14 @@ public class FibonacciHeap {
 		} else {
 			if (otherNode.child == null) { // adding first child
 				otherNode.child = current;
+				current.next.prev = current.prev;
+				current.prev.next = current.next;
 				current.next = current;
 				current.prev = current;
 			} else {
 				otherNode.child.prev.next = current;
+				current.prev.next = current.next;
+				current.next.prev = current.prev;
 				current.prev = otherNode.child.prev;
 				current.next = otherNode.child;
 				otherNode.child.prev = current;
