@@ -117,12 +117,9 @@ public class FibonacciHeap {
 		this.min.prev.next = null;
 		HeapNode current = this.min;
 
-		System.out.println();
-		System.out.println(current.prev.key);
-		System.out.println(current.prev.next);
+
 
 		while (current != null) {
-			System.out.println(current.key);
 			current.nextInLine = current.next;
 			current = current.next;
 		}
@@ -305,11 +302,15 @@ public class FibonacciHeap {
 		x.parent = null;
 		if (this.min == null) {
 			this.min = x;
+			x.next = x;
+			x.prev = x;
+			return;
 		}
 		x.next = this.min.next;
 		x.prev = this.min;
-		this.min.next = x;
 		this.min.next.prev = x;
+		this.min.next = x;
+		
 
 		// Checking if min has changed
 		if (x.key < this.min.key) {
