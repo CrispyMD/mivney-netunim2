@@ -117,8 +117,6 @@ public class FibonacciHeap {
 		this.min.prev.next = null;
 		HeapNode current = this.min;
 
-
-
 		while (current != null) {
 			current.nextInLine = current.next;
 			current = current.next;
@@ -153,16 +151,18 @@ public class FibonacciHeap {
 			}
 
 		}
-
-		this.min.prev.next = null;
-		this.min.next.prev = null;
+		// all the trees are in the buckets. now we want to insert them all back.
 		this.min.next = this.min;
 		this.min.prev = this.min;
 
 		for (int j = 0; j < buckets.size(); j++) {
 			current = (HeapNode) buckets.get(j);
 			if (current != null && i != j) {
-				this.insertTree(current);
+				current.parent = null;
+				current.prev = this.min;
+				current.next = this.min.next;
+				this.min.next = current;
+				current.next.prev = current;
 			}
 		}
 		this.totalLinks += links;
@@ -310,7 +310,6 @@ public class FibonacciHeap {
 		x.prev = this.min;
 		this.min.next.prev = x;
 		this.min.next = x;
-		
 
 		// Checking if min has changed
 		if (x.key < this.min.key) {
