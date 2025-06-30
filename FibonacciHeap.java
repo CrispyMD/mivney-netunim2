@@ -108,16 +108,6 @@ public class FibonacciHeap {
 
 		return this.SuccessiveLinking();
 
-		System.out.println(this.min.key + "#####################");
-		System.out.println(this.min.prev.key);
-		System.out.println(this.min.next.key);
-		System.out.println(this.min.prev.prev.key);
-		System.out.println(this.min.prev.prev.prev.key);
-		System.out.println(this.min.prev.prev.prev.prev.key);
-		System.out.println(this.min.prev.prev.prev.prev.prev.key);
-
-		System.out.println(this.min.prev.next.key);
-		System.out.println(this.min.next.prev.key);
 	}
 
 	private int SuccessiveLinking() {
@@ -156,13 +146,28 @@ public class FibonacciHeap {
 			current = next;
 		}
 
-		for (int i = 0; i < buckets.size(); i++) {
-			current = (HeapNode) buckets.get(i);
-			if (current != null) {
-				insertTree(current);
+		int i = -1;
+		boolean stop = false;
+		while (!stop) {
+			i++;
+			HeapNode curr = (HeapNode) buckets.get(i);
+			if (curr != null && curr == this.min) {
+				stop = true;
 			}
+
 		}
 
+		this.min.prev.next = null;
+		this.min.next.prev = null;
+		this.min.next = this.min;
+		this.min.prev = this.min;
+
+		for (int j = 0; j < buckets.size(); j++) {
+			current = (HeapNode) buckets.get(j);
+			if (current != null && i != j) {
+				this.insertTree(current);
+			}
+		}
 		this.totalLinks += links;
 		return links;
 	}
