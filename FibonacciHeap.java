@@ -105,7 +105,7 @@ public class FibonacciHeap {
 			curr = curr.next;
 		}
 		this.min = Nmin;
-
+		//UP TO HERE GOOD
 		return this.SuccessiveLinking();
 
 	}
@@ -114,19 +114,22 @@ public class FibonacciHeap {
 		java.util.ArrayList<Object> buckets = new java.util.ArrayList<>();
 		int links = 0;
 
-		
-
-
-		// while (current != start) {
-		// 	current.nextInLine = current.next;
-		// 	current = current.next;
-		// }
-
+		//ordering the nodes, so we could run on them in an organized manner
 		HeapNode start = this.min;
 		HeapNode current = this.min;
 		do {
+			current.nextInLine = current.next;
+			current = current.next;
+		}
+		while(current != start);
+
+
+
+		start = this.min;
+		current = this.min;
+		do {
 			int currentRank = current.rank;
-			HeapNode next = current.next;
+			HeapNode next = current.nextInLine;
 			// Changing array length
 			if (currentRank + 1 >= buckets.size()) {
 				for (int i = buckets.size(); i < currentRank + 2; i++) {
@@ -146,24 +149,22 @@ public class FibonacciHeap {
 
 
 
-
-		int i = -1;
-		boolean stop = false;
-		while (!stop) {
-			i++;
-			HeapNode curr = (HeapNode) buckets.get(i);
-			if (curr != null && curr == this.min) {
-				stop = true;
+		HeapNode newMin = null;
+		for(int i=0; i<buckets.size(); i++) {
+			HeapNode node = (HeapNode) buckets.get(i);
+			if(node != null && (newMin==null || node.key < newMin.key)) {
+				newMin = node;
 			}
-
 		}
+		this.min = newMin;
+
 		// all the trees are in the buckets. now we want to insert them all back.
 		this.min.next = this.min;
 		this.min.prev = this.min;
 
-		for (int j = 0; j < buckets.size(); j++) {
-			current = (HeapNode) buckets.get(j);
-			if (current != null && i != j) {
+		for (int i = 0; i < buckets.size(); i++) {
+			current = (HeapNode) buckets.get(i);
+			if (current != null && current != this.min) {
 				current.parent = null;
 				current.prev = this.min;
 				current.next = this.min.next;
@@ -190,7 +191,7 @@ public class FibonacciHeap {
 		this.trees -= 1;
 
 		HeapNode otherNode = (HeapNode) buckets.get(currentRank);
-		if (current.key <= otherNode.key) {
+		if (current.key < otherNode.key) {
 			if (current.child == null) { // adding first child
 				current.child = otherNode;
 				otherNode.next.prev = otherNode.prev;
@@ -296,6 +297,7 @@ public class FibonacciHeap {
 
 		// Adding to tree list and checking new minimum
 		insertTree(x);
+		this.trees += 1;
 
 		// cascading
 		if (parent != null && parent.cuttedChildren == this.c) {
