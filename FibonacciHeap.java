@@ -106,23 +106,18 @@ public class FibonacciHeap {
 		}
 		this.min = Nmin;
 
-
-
-		
-
-
 		return this.SuccessiveLinking();
 
 		System.out.println(this.min.key + "#####################");
-        System.out.println(this.min.prev.key);
-        System.out.println(this.min.next.key);
+		System.out.println(this.min.prev.key);
+		System.out.println(this.min.next.key);
 		System.out.println(this.min.prev.prev.key);
 		System.out.println(this.min.prev.prev.prev.key);
 		System.out.println(this.min.prev.prev.prev.prev.key);
 		System.out.println(this.min.prev.prev.prev.prev.prev.key);
 
-        System.out.println(this.min.prev.next.key);
-        System.out.println(this.min.next.prev.key);
+		System.out.println(this.min.prev.next.key);
+		System.out.println(this.min.next.prev.key);
 	}
 
 	private int SuccessiveLinking() {
@@ -135,7 +130,6 @@ public class FibonacciHeap {
 		System.out.println();
 		System.out.println(current.prev.key);
 		System.out.println(current.prev.next);
-		
 
 		while (current != null) {
 			System.out.println(current.key);
@@ -162,15 +156,7 @@ public class FibonacciHeap {
 			current = next;
 		}
 
-		current = (HeapNode) buckets.get(0);
-		int index = 0;
-		while (current == null)// searchhing for first tree in buckets to be min
-		{
-			index++;
-			current = (HeapNode) buckets.get(index);
-		}
-		this.min = current;
-		for (int i = index; i < buckets.size(); i++) {
+		for (int i = 0; i < buckets.size(); i++) {
 			current = (HeapNode) buckets.get(i);
 			if (current != null) {
 				insertTree(current);
