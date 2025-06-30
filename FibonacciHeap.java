@@ -106,7 +106,23 @@ public class FibonacciHeap {
 		}
 		this.min = Nmin;
 
+
+
+		
+
+
 		return this.SuccessiveLinking();
+
+		System.out.println(this.min.key + "#####################");
+        System.out.println(this.min.prev.key);
+        System.out.println(this.min.next.key);
+		System.out.println(this.min.prev.prev.key);
+		System.out.println(this.min.prev.prev.prev.key);
+		System.out.println(this.min.prev.prev.prev.prev.key);
+		System.out.println(this.min.prev.prev.prev.prev.prev.key);
+
+        System.out.println(this.min.prev.next.key);
+        System.out.println(this.min.next.prev.key);
 	}
 
 	private int SuccessiveLinking() {
@@ -116,7 +132,13 @@ public class FibonacciHeap {
 		this.min.prev.next = null;
 		HeapNode current = this.min;
 
+		System.out.println();
+		System.out.println(current.prev.key);
+		System.out.println(current.prev.next);
+		
+
 		while (current != null) {
+			System.out.println(current.key);
 			current.nextInLine = current.next;
 			current = current.next;
 		}
@@ -294,7 +316,6 @@ public class FibonacciHeap {
 		if (x.key < this.min.key) {
 			this.min = x;
 		}
-		return;
 	}
 
 	/**
